@@ -52,11 +52,11 @@ public class DriveTrain extends SubsystemBase {
         drive = new DifferentialDrive(mFrontLeft,mFrontRight); 
     } 
 
-    public void tankDrive(double leftV, double rightV){ 
-        if (leftV < 0.05){leftV = 0;} 
-        if (rightV < 0.05){rightV = 0;}  
+    public void arcadeDrive(double speed, double rotation){ 
+        if (speed < 0.05){speed = 0;} 
+        if (rotation < 0.05){rotation = 0;}  
 
-        drive.tankDrive(leftV,rightV); 
+        drive.arcadeDrive(speed,rotation); 
         drive.feed();
     } 
 

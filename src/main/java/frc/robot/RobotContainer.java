@@ -32,7 +32,7 @@ public class RobotContainer {
   public RobotContainer() { 
     subDriveTrain.setDefaultCommand(new DefaultDrive( 
       () -> m_driverController.getLeftY(), 
-      () -> m_driverController.getRightY(), 
+      () -> m_driverController.getRightX(), 
       subDriveTrain 
       ));
     // Configure the trigger bindings
