@@ -32,13 +32,13 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {    
-    if (Constants.driveType.equals("Arcade")){
+    if (Constants.driveType.equals("A")){
      subDrive.setDefaultCommand(new InstantCommand( 
       () -> { 
        subDrive.arcadeDrive(m_driverController.getLeftY(), m_driverController.getRightX()); 
       } 
      )); 
-    } else { 
+    } else if (Constants.driveType.equals("T")){ 
        subDrive.setDefaultCommand(new InstantCommand( 
         () -> { 
           subDrive.tankDrive(m_driverController.getLeftY(), m_driverController.getRightY());
