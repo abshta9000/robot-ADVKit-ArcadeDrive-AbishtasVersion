@@ -8,7 +8,7 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.SPI;
-import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+//import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 //import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveBaseConstants;
 
@@ -27,7 +27,7 @@ public class DriveIOSparkMax implements DriveIO{
     
     private AHRS gyro; 
 
-    private DifferentialDrive drive; 
+    //private DifferentialDrive drive; 
 
     public DriveIOSparkMax(){ 
         mFrontLeft = new CANSparkMax(DriveBaseConstants.frontLeft, MotorType.kBrushless); 
@@ -56,72 +56,39 @@ public class DriveIOSparkMax implements DriveIO{
         
         gyro = new AHRS(SPI.Port.kMXP); 
 
-        drive = new DifferentialDrive(mFrontLeft,mFrontRight);  
+        //drive = new DifferentialDrive(mFrontLeft,mFrontRight);  
 
         gyro.calibrate();  
         gyro.reset(); 
     } 
+    
+    @Override 
+    public void updateInputs(DriveIOInputs inputs){ 
+        inputs.leftBackMotorPosition = encBackLeft.getPosition();  
+        inputs.leftFrontMotorPosition = encFrontLeft.getPosition(); 
+        inputs.rightBackMotorPosition = encBackRight.getPosition(); 
+        inputs.rightFrontMotorPosition = encFrontRight.getPosition();  
 
-    public void arcadeDrive(double speed, double rotation){ 
-        if (speed < 0.05){speed = 0;} 
-        if (rotation < 0.05){rotation = 0;}  
+        inputs.centerPosition = (encBackLeft.getPosition() + encFrontLeft.getPosition() + encBackRight.getPosition() + encFrontRight.getPosition()) / 4; 
 
-        drive.arcadeDrive(speed,rotation); 
-        drive.feed();
-    } 
+        inputs.leftBackMotorVelocity = encBackLeft.getVelocity();  
+        inputs.leftFrontMotorVelocity = encFrontLeft.getVelocity(); 
+        inputs.rightFrontMotorVelocity = encFrontRight.getVelocity(); 
+        inputs.rightBackMotorVelocity = encBackRight.getVelocity();  
 
-    public double getFlPos(){ 
-        return encFrontLeft.getPosition();
+        inputs.centerVelocity = (encBackLeft.getVelocity() + encFrontLeft.getVelocity() + encFrontRight.getVelocity() + encBackRight.getVelocity()) / 4;
+        
+        inputs.gyroPitch = gyro.getPitch();  
+        inputs.gyroRoll = gyro.getRoll(); 
+        inputs.gyroYaw = gyro.getYaw(); 
     }  
 
-    public double getFrPos(){ 
-        return encFrontRight.getPosition(); 
-    } 
-
-    public double getBrPos(){ 
-        return encBackRight.getPosition();
-    } 
-
-    public double getBlPos(){ 
-        return encBackLeft.getPosition(); 
-    } 
-
-    public double getCenterPos(){ 
-        return (getFlPos() + getFrPos() + getBlPos() + getBrPos()) / 4; 
-    }   
-
-    public double getBrVelPerSec(){ 
-        return encBackRight.getVelocity();
-    } 
-
-    public double getBlVelPerSec(){ 
-        return encBackLeft.getVelocity();
-    } 
-
-    public double getFrVelPerSec(){ 
-        return encFrontRight.getVelocity();  
-    } 
-
-    public double getFlVelPerSec(){ 
-        return encFrontLeft.getVelocity();
-    } 
-
-    public double getCenterVelocity(){ 
-        return (getBlVelPerSec() + getBrVelPerSec() + getFlVelPerSec() + getFrVelPerSec()) / 4;
-    } 
-
-    public double getPitch(){ 
-        return gyro.getPitch();
-    } 
-
-    public double getRoll(){ 
-        return gyro.getRoll();
-    }  
-
-    public double getYaw(){ 
-        return gyro.getYaw();
+    @Override
+    public void setVoltage(double leftVolts, double rightVolts){ 
+        mFrontRight.set(rightVolts); 
+        mFrontLeft.set(leftVolts);  
     }
-
-
+    
+    
 
 }

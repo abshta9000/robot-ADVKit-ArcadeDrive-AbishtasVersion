@@ -30,5 +30,5 @@ public final class Constants {
     public static double linConvFactor = Units.inchesToMeters(1/gearRatio*2*Math.PI*1*Units.inchesToMeters(wheelRadius) * (2.16/0.548));
   } 
 
-  public static String driveType = "Arcade"; 
+  public static String driveType = "A"; 
 }

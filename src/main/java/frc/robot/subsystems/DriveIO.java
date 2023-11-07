@@ -6,7 +6,7 @@ public interface DriveIO {
         public double leftFrontMotorVelocity = 0.0; 
         public double rightFrontMotorVelocity = 0.0; 
         public double leftBackMotorVelocity = 0.0; 
-        public double rightBackVelocity = 0.0;  
+        public double rightBackMotorVelocity = 0.0;  
         
         public double centerVelocity = 0.0;
 
@@ -19,7 +19,9 @@ public interface DriveIO {
         
         public double gyroPitch = 0.0; 
         public double gyroRoll = 0.0; 
-        public double gyroYaw = 0.0; 
+        public double gyroYaw = 0.0;
+        
+       
         }    
         
     public default void updateInputs(DriveIOInputs inputs){} 
