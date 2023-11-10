@@ -20,15 +20,18 @@ public final class Constants {
   } 
   public static class DriveBaseConstants {   
     // From Armstrong directly 
-    public static int frontLeft = 11; 
-    public static int frontRight = 13; 
-    public static int backRight = 15 ; 
-    public static int backLeft = 12;
+    public static final int frontLeft = 11; 
+    public static final int frontRight = 13; 
+    public static final int backRight = 15 ; 
+    public static final int backLeft = 12;
 
-    public static double gearRatio = 7.89; 
-    public static double wheelRadius = 3; 
-    public static double linConvFactor = Units.inchesToMeters(1/gearRatio*2*Math.PI*1*Units.inchesToMeters(wheelRadius) * (2.16/0.548));
+    public static final double gearRatio = 7.89; 
+    public static final double wheelRadius = 3;
+    public static final double kwheelCircumference = 18.85; 
+    public static final double linConvFactor = Units.inchesToMeters(1/gearRatio*2*Math.PI*1*Units.inchesToMeters(wheelRadius) * (2.16/0.548));
+    public static final double kEncoderCPR = 4096.0;
+    public static final double kEncoderDistancePerPulse = ((2*wheelRadius) * Math.PI) / (double) kEncoderCPR;
   } 
 
-  public static String driveType = "A"; 
+  public static final String driveType = "A"; 
 }

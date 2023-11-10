@@ -1,10 +1,11 @@
-package frc.robot.subsystems;
+package frc.robot.subsystems.drive;
 
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-//import frc.robot.subsystems.DriveIO.DriveIOInputs;
+//likely necessary but cant figure it out
+//import frc.robot.subsystems.DriveIOInputsAutoLogged;
 
 public class Drive extends SubsystemBase{ 
     private final DriveIO io;  
