@@ -1,5 +1,7 @@
 package frc.robot.subsystems.drive; 
 import org.littletonrobotics.junction.AutoLog;
+
+import edu.wpi.first.math.geometry.Rotation2d;
 public interface DriveIO {   
     @AutoLog
     public static class DriveIOInputs{  
@@ -17,9 +19,9 @@ public interface DriveIO {
 
         public double centerPosition = 0.0;
         
-        public double gyroPitch = 0.0; 
-        public double gyroRoll = 0.0; 
-        public double gyroYaw = 0.0;
+        public Rotation2d gyroPitch = new Rotation2d(); 
+        public Rotation2d gyroRoll = new Rotation2d(); 
+        public Rotation2d gyroYaw = new Rotation2d();
         
        
         }    
