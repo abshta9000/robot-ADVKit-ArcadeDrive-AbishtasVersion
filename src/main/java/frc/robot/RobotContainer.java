@@ -4,8 +4,10 @@
 
 package frc.robot;
 
-import frc.robot.Constants.OperatorConstants;
+import frc.robot.Constants.*;
+import frc.robot.Constants.AutonConstants.Modes;
 import frc.robot.commands.ArcadeCommand;
+import frc.robot.subsystems.auton.Auton;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.DriveIOSim;
 import frc.robot.subsystems.drive.DriveIOSparkMax;
@@ -13,6 +15,7 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
@@ -25,27 +28,52 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private Drive subDrive = new Drive(new DriveIOSim()); 
-  private final CommandXboxController m_driverController =  new CommandXboxController(OperatorConstants.kDriverControllerPort);
-  private SendableChooser<Command> teleopChooser;
+  private Auton subAuton = new Auton(subDrive);
+
+  private CommandXboxController m_driverController =  new CommandXboxController(OperatorConstants.kDriverControllerPort);
+  private CommandGenericHID buttonBoard = new CommandGenericHID(OperatorConstants.ButtonBoard.BUTTONBOARD_PORT);
+
+  private SendableChooser<Command> autonChooser;
+
+
+  Trigger buttonLOWPOS,
+   buttonHIGHPOS,
+   buttonMIDPOS,
+   sniperToggle,
+   coneToggle,
+   buttonSUBSTATIONPOS,
+   buttonIDLEPOS,
+   buttonOUT, 
+   buttonIN,
+   buttonGROUNDPOS,
+   toggleIntakeButton,
+   toggleOutakeButton,
+   snipermodeButton;
+
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {    
 
-    teleopChooser = new SendableChooser<>();
+    autonChooser = new SendableChooser<>();
 
-    Shuffleboard.getTab("Teleoperated").add(teleopChooser);
-    teleopChooser.addOption(null, null);
+    // Shuffleboard.getTab("Teleoperated").add(teleopChooser);
+    // teleopChooser.addOption(null, null);
 
-    // subDrive.setDefaultCommand(new InstantCommand( 
-    // () -> { 
-    //   subDrive.tankDrive(m_driverController.getLeftY(), m_driverController.getRightY());
-    // }
-    // )); 
     subDrive.setDefaultCommand(new ArcadeCommand(
       () -> -m_driverController.getLeftY(),
       () -> m_driverController.getRightX(),
       subDrive
     ));
+
+    Shuffleboard.getTab("Autonomous: ").add(autonChooser);
+    autonChooser.addOption("CONE MOBILITY", autonChooser.autonomousCmd(Modes.CONE_MOBILITY));
+    autonChooser.addOption("CONE MOBILITY DOCK", autonChooser.autonomousCmd(Modes.CONE_MOBILITY_DOCK));
+    autonChooser.addOption("CONE SCORE ONLY", autonChooser.autonomousCmd(Modes.CONE_SCORE_ONLY));
+    autonChooser.addOption("CUBE SCORE ONLY", autonChooser.autonomousCmd(Modes.CUBE_SCORE_ONLY));
+    autonChooser.addOption("CUBE MOBILITY EXTEND GRAB", autonChooser.autonomousCmd(Modes.CUBE_MOBILITY_EXTEND_GRAB));
+    autonChooser.addOption("(Exp*) CONE MOBILITY TURN EXTEND", autonChooser.autonomousCmd(Modes.EXP_CONE_MOBILITY_TURN_EXTEND));
+    autonChooser.addOption("(Exp*) RED CONE MOBILITY TURN", autonChooser.autonomousCmd(Modes.EXP_RED_CONE_MOBILITY_TURN));
+
     configureBindings();  
     
   } 
@@ -61,10 +89,16 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
-
-    // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
-    // cancelling on release.
+    //code from rookie rewrite (by me btw)
+    sniperToggle
+    .and(m_driverController.leftTrigger()
+    .and(m_driverController.rightTrigger()
+    .whileTrue(
+      new InstantCommand(
+        () -> subDrive.setDriveSniperMode(true)))
+    .onFalse(
+      new InstantCommand(
+        () -> subDrive.setDriveSniperMode(false)))));
   }
 
   /**
