@@ -5,7 +5,9 @@
 package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.commands.ArcadeCommand;
 import frc.robot.subsystems.drive.Drive;
+import frc.robot.subsystems.drive.DriveIOSim;
 import frc.robot.subsystems.drive.DriveIOSparkMax;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -22,7 +24,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private Drive subDrive = new Drive(new DriveIOSparkMax()); 
+  private Drive subDrive = new Drive(new DriveIOSim()); 
   private final CommandXboxController m_driverController =  new CommandXboxController(OperatorConstants.kDriverControllerPort);
   private SendableChooser<Command> teleopChooser;
 
@@ -34,10 +36,15 @@ public class RobotContainer {
     Shuffleboard.getTab("Teleoperated").add(teleopChooser);
     teleopChooser.addOption(null, null);
 
-    subDrive.setDefaultCommand(new InstantCommand( 
-    () -> { 
-      subDrive.tankDrive(m_driverController.getLeftY(), m_driverController.getRightY());
-    }
+    // subDrive.setDefaultCommand(new InstantCommand( 
+    // () -> { 
+    //   subDrive.tankDrive(m_driverController.getLeftY(), m_driverController.getRightY());
+    // }
+    // )); 
+    subDrive.setDefaultCommand(new ArcadeCommand(
+      () -> -m_driverController.getLeftY(),
+      () -> m_driverController.getRightX(),
+      subDrive
     ));
     configureBindings();  
     

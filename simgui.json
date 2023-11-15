@@ -1,1 +1,8 @@
-{}
+{
+  "NTProvider": {
+    "types": {
+      "/FMSInfo": "FMSInfo",
+      "/Shuffleboard/Teleoperated/SendableChooser[0]": "String Chooser"
+    }
+  }
+}

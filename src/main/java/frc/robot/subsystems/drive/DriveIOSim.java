@@ -26,6 +26,7 @@ public class DriveIOSim implements DriveIO{
     
     @Override 
     public void updateInputs(DriveIOInputs inputs){ 
+        sim.update(0.02);
         double leftBackMotorPosition = Units.radiansToRotations(sim.getLeftPositionMeters() / Units.inchesToMeters(DriveBaseConstants.wheelRadius));
         double leftFrontMotorPosition = Units.radiansToRotations(sim.getLeftPositionMeters() / Units.inchesToMeters(DriveBaseConstants.wheelRadius));
         double rightBackMotorPosition = Units.radiansToRotations(sim.getRightPositionMeters() / Units.inchesToMeters(DriveBaseConstants.wheelRadius));
