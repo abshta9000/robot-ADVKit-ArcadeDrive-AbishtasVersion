@@ -63,7 +63,16 @@ public final class Constants {
       CONE_SCORE_ONLY,
       CONE_MOBILITY_DOCK,
       CONE_MOBILITY,
+      DOCK,
     }
+    public static final double kdriveSpeed = 0;
+    public static final double kdriverotation = 0;
+    public static final double kMaxTurnRateDegPerS = 0;
+    public static final double kMaxTurnAccelerationDegPerSSquared = 0; 
+
+    public static double kp = 0;
+    public  static double ki = 0;
+    public  static double kd = 0;
   }
 
 

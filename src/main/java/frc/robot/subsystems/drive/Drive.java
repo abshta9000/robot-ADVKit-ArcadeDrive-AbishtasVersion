@@ -13,9 +13,11 @@ public class Drive extends SubsystemBase{
     private final DriveIOInputsAutoLogged inputs = new DriveIOInputsAutoLogged();  
 
     private boolean drivesniperMode = false;
+    private double initialGyroPitch;
 
     public Drive(DriveIO io){ 
       this.io = io; 
+      initialGyroPitch = getGyroPitch();
     } 
 
     @Override 
@@ -58,5 +60,13 @@ public class Drive extends SubsystemBase{
 
     public void setDriveSniperMode(boolean b) {
         drivesniperMode = b;
+    }
+
+    public double getGyroPitch(){
+        return inputs.gyroPitch.getDegrees();
+    }
+
+    public double getInitialGyroPitch(){
+        return initialGyroPitch;
     }
 } 

@@ -7,7 +7,10 @@ package frc.robot.subsystems.auton;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.subsystems.drive.Drive;
+import frc.robot.Constants.AutonConstants;
 import frc.robot.Constants.AutonConstants.Modes;
+import frc.robot.commands.ArcadeCommand;
+import frc.robot.commands.DrivePIDCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 public class Auton {
@@ -27,11 +30,24 @@ public class Auton {
       case CONE_SCORE_ONLY: return new SequentialCommandGroup (new InstantCommand( () -> System.out.println("auton in progress")));
       case CONE_MOBILITY_DOCK: return new SequentialCommandGroup (new InstantCommand( () -> System.out.println("auton in progress")));
       case CONE_MOBILITY: return new SequentialCommandGroup (new InstantCommand( () -> System.out.println("auton in progress")));
+      case DOCK: return new SequentialCommandGroup (
+
+      );
+      
       default: 
       return new SequentialCommandGroup (
-          new InstantCommand( () -> System.out.println("ERROR: Autonomous Failure."))
+          new InstantCommand( () -> System.out.println("auton dieed"))
       );
     }
-
+  }
+  public Command driveStraight(double time, int modifier){
+    return new ArcadeCommand(() -> (modifier * AutonConstants.kdriveSpeed), () -> 0.0,driveSub).withTimeout(time);
+  }
+  public Command driveTurn(double time, int modifier){
+    return new ArcadeCommand(() -> 0.0, () -> (AutonConstants.kdriverotation * modifier),driveSub).withTimeout(time);
+  }
+  // pid command engaged after going over the charge station
+  public Command drivePID(double time){
+    return new DrivePIDCommand(driveSub).withTimeout(time);
   }
 }

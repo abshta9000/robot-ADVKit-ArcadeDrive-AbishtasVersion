@@ -8,9 +8,7 @@ import frc.robot.Constants.*;
 import frc.robot.Constants.AutonConstants.Modes;
 import frc.robot.commands.ArcadeCommand;
 import frc.robot.subsystems.auton.Auton;
-import frc.robot.subsystems.drive.Drive;
-import frc.robot.subsystems.drive.DriveIOSim;
-import frc.robot.subsystems.drive.DriveIOSparkMax;
+import frc.robot.subsystems.drive.*;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -66,13 +64,14 @@ public class RobotContainer {
     ));
 
     Shuffleboard.getTab("Autonomous: ").add(autonChooser);
-    autonChooser.addOption("CONE MOBILITY", autonChooser.autonomousCmd(Modes.CONE_MOBILITY));
-    autonChooser.addOption("CONE MOBILITY DOCK", autonChooser.autonomousCmd(Modes.CONE_MOBILITY_DOCK));
-    autonChooser.addOption("CONE SCORE ONLY", autonChooser.autonomousCmd(Modes.CONE_SCORE_ONLY));
-    autonChooser.addOption("CUBE SCORE ONLY", autonChooser.autonomousCmd(Modes.CUBE_SCORE_ONLY));
-    autonChooser.addOption("CUBE MOBILITY EXTEND GRAB", autonChooser.autonomousCmd(Modes.CUBE_MOBILITY_EXTEND_GRAB));
-    autonChooser.addOption("(Exp*) CONE MOBILITY TURN EXTEND", autonChooser.autonomousCmd(Modes.EXP_CONE_MOBILITY_TURN_EXTEND));
-    autonChooser.addOption("(Exp*) RED CONE MOBILITY TURN", autonChooser.autonomousCmd(Modes.EXP_RED_CONE_MOBILITY_TURN));
+    autonChooser.addOption("DOCK", subAuton.autonomousCommand(Modes.DOCK));
+    autonChooser.addOption("CONE MOBILITY", subAuton.autonomousCommand(Modes.CONE_MOBILITY));
+    autonChooser.addOption("CONE MOBILITY DOCK", subAuton.autonomousCommand(Modes.CONE_MOBILITY_DOCK));
+    autonChooser.addOption("CONE SCORE ONLY", subAuton.autonomousCommand(Modes.CONE_SCORE_ONLY));
+    autonChooser.addOption("CUBE SCORE ONLY", subAuton.autonomousCommand(Modes.CUBE_SCORE_ONLY));
+    autonChooser.addOption("CUBE MOBILITY EXTEND GRAB", subAuton.autonomousCommand(Modes.CUBE_MOBILITY_EXTEND_GRAB));
+    autonChooser.addOption("(Exp*) CONE MOBILITY TURN EXTEND", subAuton.autonomousCommand(Modes.EXP_CONE_MOBILITY_TURN_EXTEND));
+    autonChooser.addOption("(Exp*) RED CONE MOBILITY TURN", subAuton.autonomousCommand(Modes.EXP_RED_CONE_MOBILITY_TURN));
 
     configureBindings();  
     
