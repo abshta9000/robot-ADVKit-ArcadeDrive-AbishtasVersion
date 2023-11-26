@@ -26,7 +26,7 @@ public class DriveIOSim implements DriveIO{
     
     @Override 
     public void updateInputs(DriveIOInputs inputs){ 
-        sim.update(0.02);
+        sim.update(.02);
         double leftBackMotorPosition = Units.radiansToRotations(sim.getLeftPositionMeters() / Units.inchesToMeters(DriveBaseConstants.wheelRadius));
         double leftFrontMotorPosition = Units.radiansToRotations(sim.getLeftPositionMeters() / Units.inchesToMeters(DriveBaseConstants.wheelRadius));
         double rightBackMotorPosition = Units.radiansToRotations(sim.getRightPositionMeters() / Units.inchesToMeters(DriveBaseConstants.wheelRadius));
@@ -44,6 +44,7 @@ public class DriveIOSim implements DriveIO{
         double rightFrontMotorVelocity = Units.radiansToRotations(sim.getRightVelocityMetersPerSecond() / Units.inchesToMeters(DriveBaseConstants.wheelRadius));
         double rightBackMotorVelocity = Units.radiansToRotations(sim.getRightVelocityMetersPerSecond() / Units.inchesToMeters(DriveBaseConstants.wheelRadius));  
         
+        
         inputs.leftBackMotorVelocity = leftBackMotorVelocity;
         inputs.leftFrontMotorVelocity = leftFrontMotorVelocity;
         inputs.rightFrontMotorVelocity = rightFrontMotorVelocity;
@@ -58,6 +59,7 @@ public class DriveIOSim implements DriveIO{
 
     @Override
     public void setVoltage(double leftVolts, double rightVolts){ 
+        
         leftAppliedVolts = MathUtil.clamp(leftVolts, -12.0, 12.0);
         rightAppliedVolts = MathUtil.clamp(rightVolts, -12.0, 12.0);
         sim.setInputs(leftAppliedVolts, rightAppliedVolts);

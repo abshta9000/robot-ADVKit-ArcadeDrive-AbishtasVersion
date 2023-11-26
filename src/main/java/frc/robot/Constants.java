@@ -68,7 +68,10 @@ public final class Constants {
     public static final double kdriveSpeed = 0;
     public static final double kdriverotation = 0;
     public static final double kMaxTurnRateDegPerS = 0;
-    public static final double kMaxTurnAccelerationDegPerSSquared = 0; 
+    public static final double kMaxTurnAccelerationDegPerSSquared = 0;
+    public static final double kcontrollermodifier = 1;
+    public static final double kfeedforwardmodifier = 1;
+      
 
     public static double kp = 0;
     public  static double ki = 0;

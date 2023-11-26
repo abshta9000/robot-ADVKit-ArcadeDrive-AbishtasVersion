@@ -31,6 +31,7 @@ public class ArcadeCommand extends CommandBase {
  
   @Override
   public void execute() {
+    
     double reducedSpeed = speedFunction.getAsDouble();
     double reducedRotation = rotationFunction.getAsDouble();
 

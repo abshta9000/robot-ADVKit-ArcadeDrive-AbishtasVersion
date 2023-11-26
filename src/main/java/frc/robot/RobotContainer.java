@@ -11,6 +11,7 @@ import frc.robot.subsystems.auton.Auton;
 import frc.robot.subsystems.drive.*;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
@@ -25,8 +26,8 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private Drive subDrive = new Drive(new DriveIOSim()); 
-  private Auton subAuton = new Auton(subDrive);
+  private Drive subDrive;
+  private Auton subAuton;
 
   private CommandXboxController m_driverController =  new CommandXboxController(OperatorConstants.kDriverControllerPort);
   private CommandGenericHID buttonBoard = new CommandGenericHID(OperatorConstants.ButtonBoard.BUTTONBOARD_PORT);
@@ -37,7 +38,7 @@ public class RobotContainer {
   Trigger buttonLOWPOS,
    buttonHIGHPOS,
    buttonMIDPOS,
-   sniperToggle,
+   sniperToggle = buttonBoard.button(OperatorConstants.ButtonBoard.SNIPERMODE_BUTTON),
    coneToggle,
    buttonSUBSTATIONPOS,
    buttonIDLEPOS,
@@ -52,6 +53,10 @@ public class RobotContainer {
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {    
 
+    subDrive = new Drive(new DriveIOSim()); 
+    subAuton = new Auton(subDrive);
+
+    SmartDashboard.putNumber("GYRO CALC", 1);
     autonChooser = new SendableChooser<>();
 
     // Shuffleboard.getTab("Teleoperated").add(teleopChooser);
@@ -65,14 +70,7 @@ public class RobotContainer {
 
     Shuffleboard.getTab("Autonomous: ").add(autonChooser);
     autonChooser.addOption("DOCK", subAuton.autonomousCommand(Modes.DOCK));
-    autonChooser.addOption("CONE MOBILITY", subAuton.autonomousCommand(Modes.CONE_MOBILITY));
-    autonChooser.addOption("CONE MOBILITY DOCK", subAuton.autonomousCommand(Modes.CONE_MOBILITY_DOCK));
-    autonChooser.addOption("CONE SCORE ONLY", subAuton.autonomousCommand(Modes.CONE_SCORE_ONLY));
-    autonChooser.addOption("CUBE SCORE ONLY", subAuton.autonomousCommand(Modes.CUBE_SCORE_ONLY));
-    autonChooser.addOption("CUBE MOBILITY EXTEND GRAB", subAuton.autonomousCommand(Modes.CUBE_MOBILITY_EXTEND_GRAB));
-    autonChooser.addOption("(Exp*) CONE MOBILITY TURN EXTEND", subAuton.autonomousCommand(Modes.EXP_CONE_MOBILITY_TURN_EXTEND));
-    autonChooser.addOption("(Exp*) RED CONE MOBILITY TURN", subAuton.autonomousCommand(Modes.EXP_RED_CONE_MOBILITY_TURN));
-
+    
     configureBindings();  
     
   } 
@@ -98,6 +96,11 @@ public class RobotContainer {
     .onFalse(
       new InstantCommand(
         () -> subDrive.setDriveSniperMode(false)))));
+  }
+
+
+  public Command getAutonomousCommand() {
+    return autonChooser.getSelected();
   }
 
   /**

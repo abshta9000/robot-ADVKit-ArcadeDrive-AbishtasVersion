@@ -9,8 +9,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.Constants.AutonConstants;
 import frc.robot.Constants.AutonConstants.Modes;
-import frc.robot.commands.ArcadeCommand;
-import frc.robot.commands.DrivePIDCommand;
+import frc.robot.commands.*;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 public class Auton {
@@ -23,16 +22,8 @@ public class Auton {
   }
   public Command autonomousCommand(Modes val){
     switch(val){
-      case EXP_RED_CONE_MOBILITY_TURN: return new SequentialCommandGroup (new InstantCommand( () -> System.out.println("auton in progress")));
-      case EXP_CONE_MOBILITY_TURN_EXTEND: return new SequentialCommandGroup (new InstantCommand( () -> System.out.println("auton in progress")));
-      case CUBE_MOBILITY_EXTEND_GRAB: return new SequentialCommandGroup (new InstantCommand( () -> System.out.println("auton in progress")));
-      case CUBE_SCORE_ONLY: return new SequentialCommandGroup (new InstantCommand( () -> System.out.println("auton in progress")));
-      case CONE_SCORE_ONLY: return new SequentialCommandGroup (new InstantCommand( () -> System.out.println("auton in progress")));
-      case CONE_MOBILITY_DOCK: return new SequentialCommandGroup (new InstantCommand( () -> System.out.println("auton in progress")));
-      case CONE_MOBILITY: return new SequentialCommandGroup (new InstantCommand( () -> System.out.println("auton in progress")));
-      case DOCK: return new SequentialCommandGroup (
-
-      );
+      case DOCK: return new SequentialCommandGroup(drivePID(4));
+      
       
       default: 
       return new SequentialCommandGroup (
@@ -48,6 +39,8 @@ public class Auton {
   }
   // pid command engaged after going over the charge station
   public Command drivePID(double time){
+    //System.out.println("drivePID43");
     return new DrivePIDCommand(driveSub).withTimeout(time);
+    //return new test().withTimeout(time);
   }
 }

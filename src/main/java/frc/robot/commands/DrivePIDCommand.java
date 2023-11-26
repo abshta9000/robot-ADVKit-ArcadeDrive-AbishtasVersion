@@ -4,37 +4,42 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.math.controller.BangBangController;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.PIDCommand;
 import frc.robot.Constants.AutonConstants;
 import frc.robot.subsystems.drive.Drive;
-import edu.wpi.first.math.controller.ArmFeedforward;
-import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.ProfiledPIDCommand;
 
 public class DrivePIDCommand extends PIDCommand {
   /** Creates a new DrivePIDCommand. */
+  
 
   public DrivePIDCommand(Drive drivesub) {
-  super(
-    new PIDController(AutonConstants.kp,AutonConstants.ki,AutonConstants.kd),
-    drivesub::getGyroPitch,
-    drivesub.getInitialGyroPitch(),
-    (output,setpoint) -> drivesub.autonomousArcadeDrive(0,output),
-    drivesub);
-    //this.driveSub = drivesub;
-    // Use addRequirements() here to declare subsystem dependencies.
+    super(
+      new PIDController(1,0,0),
+      drivesub::getGyroPitch, 
+      () -> drivesub.getInitialGyroPitch(), 
+      output -> {
+        //SmartDashboard.putNumber("GYRO CALC", 10);
+        BangBangController controller = new BangBangController();
+        SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(1,0, 0);
+        drivesub.autonomousArcadeDrive(
+          (controller.calculate(drivesub.getGyroPitch(),drivesub.getInitialGyroPitch()) * AutonConstants.kcontrollermodifier) 
+          + (feedforward.calculate(drivesub.getInitialGyroPitch() * AutonConstants.kfeedforwardmodifier)),
+          0);
+        
+        //drivesub.autonomousArcadeDrive(1,0);
+      });
     addRequirements(drivesub);
-    //getController().setTolerance(2.5);
-
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+  
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
@@ -50,3 +55,4 @@ public class DrivePIDCommand extends PIDCommand {
     return false;
   }
 }
+

@@ -23,13 +23,14 @@ public class Drive extends SubsystemBase{
     @Override 
     public void periodic(){   
         io.updateInputs(inputs);   
-        Logger.getInstance().processInputs("Drive Train", inputs);
+        Logger.getInstance().processInputs("DriveTrain", inputs);
         SmartDashboard.putBoolean("DriveSniperMode", drivesniperMode);
     } 
 
     public void arcadeDrive(double i_speed, double i_rotation){
-        double speed = 0;
-        double rotation = 0;
+        
+        double speed = i_speed;
+        double rotation = i_rotation;
         if (drivesniperMode) {
             System.out.println("DriveSubsystem -Sniper Mode is running");
             speed *= DriveBaseConstants.DRIVE_SNIPER_SPEED;
@@ -68,5 +69,9 @@ public class Drive extends SubsystemBase{
 
     public double getInitialGyroPitch(){
         return initialGyroPitch;
+    }
+
+    public void setinputstest(int i) {
+        inputs.centerVelocity = i;
     }
 } 
