@@ -17,7 +17,7 @@ public class Drive extends SubsystemBase{
 
     public Drive(DriveIO io){ 
       this.io = io; 
-      initialGyroPitch = getGyroPitch();
+      this.initialGyroPitch = getGyroPitch();
     } 
 
     @Override 
@@ -64,14 +64,10 @@ public class Drive extends SubsystemBase{
     }
 
     public double getGyroPitch(){
-        return inputs.gyroPitch.getDegrees();
+        return inputs.gyroPitch;
     }
 
     public double getInitialGyroPitch(){
         return initialGyroPitch;
-    }
-
-    public void setinputstest(int i) {
-        inputs.centerVelocity = i;
     }
 } 

@@ -15,9 +15,6 @@
   },
   "NetworkTables": {
     "transitory": {
-      "FMSInfo": {
-        "open": true
-      },
       "Shuffleboard": {
         "open": true
       },

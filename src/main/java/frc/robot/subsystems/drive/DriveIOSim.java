@@ -1,15 +1,11 @@
 package frc.robot.subsystems.drive;
 
-//import org.littletonrobotics.junction.Logger;
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim;
 import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim.KitbotGearing;
 import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim.KitbotMotor;
 import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim.KitbotWheelSize;
-//import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-//import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveBaseConstants;
 
 
@@ -52,9 +48,9 @@ public class DriveIOSim implements DriveIO{
 
         inputs.centerVelocity = (leftBackMotorVelocity + leftFrontMotorVelocity + rightFrontMotorVelocity + rightBackMotorVelocity) / 4;
         
-        inputs.gyroPitch = new Rotation2d(0);  
-        inputs.gyroRoll = new Rotation2d(0);
-        inputs.gyroYaw = sim.getHeading(); 
+        inputs.gyroPitch = 0;  
+        inputs.gyroRoll = 0;
+        inputs.gyroYaw = sim.getHeading().getDegrees(); 
     }  
 
     @Override

@@ -40,7 +40,7 @@ public class Auton {
   // pid command engaged after going over the charge station
   public Command drivePID(double time){
     //System.out.println("drivePID43");
-    return new DrivePIDCommand(driveSub).withTimeout(time);
+    return new DrivePIDCommand(driveSub);//.withTimeout(time);
     //return new test().withTimeout(time);
   }
 }

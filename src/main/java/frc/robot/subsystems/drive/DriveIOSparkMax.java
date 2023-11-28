@@ -6,11 +6,7 @@ import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.SPI;
-//import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-//import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveBaseConstants;
 
 
@@ -79,9 +75,9 @@ public class DriveIOSparkMax implements DriveIO{
 
         inputs.centerVelocity = (encBackLeft.getVelocity() + encFrontLeft.getVelocity() + encFrontRight.getVelocity() + encBackRight.getVelocity()) / 4;
         
-        inputs.gyroPitch = Rotation2d.fromDegrees(gyro.getPitch());  
-        inputs.gyroRoll = Rotation2d.fromDegrees(gyro.getRoll()); 
-        inputs.gyroYaw = Rotation2d.fromDegrees(gyro.getYaw()); 
+        inputs.gyroPitch = (gyro.getPitch());  
+        inputs.gyroRoll = (gyro.getRoll()); 
+        inputs.gyroYaw = (gyro.getYaw()); 
     }  
 
     @Override

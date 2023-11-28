@@ -2,8 +2,6 @@ package frc.robot.subsystems.drive;
 //import org.littletonrobotics.junction.Logger;
 import com.kauailabs.navx.frc.AHRS;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
-
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.SPI;
 import frc.robot.Constants.DriveBaseConstants;
 
@@ -77,9 +75,9 @@ public class DriveIOTalonFX implements DriveIO{
 
         inputs.centerVelocity = (leftBackMotorVelocity + leftFrontMotorVelocity + rightFrontMotorVelocity + rightBackMotorVelocity) / 4;
         
-        inputs.gyroPitch = Rotation2d.fromDegrees(gyro.getPitch());  
-        inputs.gyroRoll = Rotation2d.fromDegrees(gyro.getRoll()); 
-        inputs.gyroYaw = Rotation2d.fromDegrees(gyro.getYaw()); 
+        inputs.gyroPitch = (gyro.getPitch());  
+        inputs.gyroRoll = (gyro.getRoll()); 
+        inputs.gyroYaw = (gyro.getYaw()); 
     }  
 
     @Override
