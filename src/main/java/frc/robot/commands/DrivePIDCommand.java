@@ -17,7 +17,7 @@ public class DrivePIDCommand extends PIDCommand {
 
   public DrivePIDCommand(Drive drivesub) {
     super(
-      new PIDController(1,1,1),
+      new PIDController(.02,0,0),
       drivesub::getGyroPitch, 
       () -> drivesub.getInitialGyroPitch(), 
       output -> {
