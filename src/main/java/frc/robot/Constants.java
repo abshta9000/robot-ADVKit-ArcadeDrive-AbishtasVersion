@@ -69,15 +69,24 @@ public final class Constants {
     public static final double kdriverotation = 0;
     public static final double kMaxTurnRateDegPerS = 0;
     public static final double kMaxTurnAccelerationDegPerSSquared = 0;
-    public static final double kcontrollermodifier = 1;
-    public static final double kfeedforwardmodifier = 1;
       
 
     public static double kp = 0;
-    public  static double ki = 0;
-    public  static double kd = 0;
+    public static double ki = 0;
+    public static double kd = 0;
   }
 
+  public static class ArmConstants{
+    public static final int karmPort = 21;
+    public static final double kgearRatio = 1;
+    public static class encoder{
+      public static final int kchannelA = 0;
+      public static final int kchannelB = 1;
+    }
 
-  public static final String driveType = "A"; 
+    public static final double kSniperSpeed = .7;
+    public static final double kSafeTemp = 60;
+    public static final float kReverseSoftLimit = 0;
+    public static final float kForwardSoftLimit = 270;
+  }
 }

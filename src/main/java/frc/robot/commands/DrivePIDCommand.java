@@ -6,9 +6,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.math.controller.BangBangController;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj2.command.PIDCommand;
-import frc.robot.Constants.AutonConstants;
 import frc.robot.subsystems.drive.Drive;
 
 public class DrivePIDCommand extends PIDCommand {
@@ -21,9 +19,7 @@ public class DrivePIDCommand extends PIDCommand {
       drivesub::getGyroPitch, 
       () -> drivesub.getInitialGyroPitch(), 
       output -> {
-        //SmartDashboard.putNumber("GYRO CALC", 10);
         BangBangController controller = new BangBangController();
-        //SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(1,0, 0);
         drivesub.autonomousArcadeDrive(
           (controller.calculate(drivesub.getGyroPitch(),drivesub.getInitialGyroPitch())),0);
         
