@@ -88,5 +88,7 @@ public final class Constants {
     public static final double kSafeTemp = 60;
     public static final float kReverseSoftLimit = 0;
     public static final float kForwardSoftLimit = 270;
+
+    public static class sim{}
   }
 }

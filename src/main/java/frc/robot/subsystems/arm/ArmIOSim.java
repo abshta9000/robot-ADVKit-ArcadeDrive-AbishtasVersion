@@ -8,6 +8,8 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMax.SoftLimitDirection;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
+import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 import frc.robot.Constants.ArmConstants;
@@ -15,11 +17,24 @@ import frc.robot.Constants.ArmConstants;
 public class ArmIOSim implements ArmIO {
   /** Creates a new ArmIOSparkMax. */
 
+
   private SingleJointedArmSim sim;
   private Encoder encoder;   
   
   public ArmIOSim() {
-    armMotor = new CANSparkMax(ArmConstants.karmPort, MotorType.kBrushless);
+    sim = new SingleJointedArmSim(
+        new DCMotor(0,
+            1, 
+            1, 
+            0, 
+            0, 
+            0), 
+        0, 
+        0, 
+        0, 
+        0, 
+        0, 
+        false);
     encoder = new Encoder(ArmConstants.encoder.kchannelA,ArmConstants.encoder.kchannelB);
 
     encoder.reset();
@@ -34,13 +49,12 @@ public class ArmIOSim implements ArmIO {
 
   @Override 
   public void updateInputs(ArmIOInputs inputs){
-    inputs.temperature = armMotor.getMotorTemperature();
+    inputs.temperature = 0;
     inputs.degrees = encoder.get() * ArmConstants.kgearRatio;
-
     inputs.position = inputs.degrees * Math.PI / 180;
   }
 
   public void setVoltage(int voltage){
-    armMotor.setVoltage(voltage);
+    sim.setInput(voltage);
   }
 }
