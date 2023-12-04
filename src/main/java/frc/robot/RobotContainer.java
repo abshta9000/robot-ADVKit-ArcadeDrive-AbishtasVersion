@@ -6,7 +6,7 @@ package frc.robot;
 
 import frc.robot.Constants.*;
 import frc.robot.Constants.AutonConstants.Modes;
-import frc.robot.commands.ArcadeCommand;
+import frc.robot.commands.drive.ArcadeCommand;
 import frc.robot.subsystems.auton.Auton;
 import frc.robot.subsystems.drive.*;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;

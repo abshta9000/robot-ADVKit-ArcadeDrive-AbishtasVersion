@@ -4,37 +4,31 @@
 
 package frc.robot.subsystems.arm;
 
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMax.IdleMode;
-import com.revrobotics.CANSparkMax.SoftLimitDirection;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import edu.wpi.first.wpilibj.Encoder;
 import frc.robot.Constants.ArmConstants;
 
-public class ArmIOSparkMax implements ArmIO {
+public class ArmIOTalonFX implements ArmIO {
   /** Creates a new ArmIOSparkMax. */
 
-  private CANSparkMax armMotor;
+  private WPI_TalonFX armMotor;
   private Encoder encoder;   
   
-  public ArmIOSparkMax() {
-    armMotor = new CANSparkMax(ArmConstants.karmPort, MotorType.kBrushless);
+  public ArmIOTalonFX() {
+    armMotor = new WPI_TalonFX(ArmConstants.karmPort);
     encoder = new Encoder(ArmConstants.encoder.kchannelA,ArmConstants.encoder.kchannelB);
 
-    armMotor.restoreFactoryDefaults();
-    armMotor.clearFaults();
-    armMotor.setIdleMode(IdleMode.kBrake);
-    armMotor.setSmartCurrentLimit(60);
-    armMotor.setSoftLimit(SoftLimitDirection.kForward, ArmConstants.kForwardSoftLimit);
-    armMotor.setSoftLimit(SoftLimitDirection.kReverse, ArmConstants.kReverseSoftLimit);
-
+    armMotor.setSafetyEnabled(false);
+    armMotor.configForwardSoftLimitThreshold(ArmConstants.kForwardSoftLimit);
+    armMotor.configReverseSoftLimitThreshold(ArmConstants.kReverseSoftLimit);
+    armMotor.feed();
     encoder.reset();
 
   }
 
   @Override 
   public void updateInputs(ArmIOInputs inputs){
-    inputs.temperature = armMotor.getMotorTemperature();
+    inputs.temperature = armMotor.getTemperature();
     inputs.degrees = encoder.get() * ArmConstants.kgearRatio;
 
     inputs.position = inputs.degrees * Math.PI / 180;

@@ -79,16 +79,19 @@ public final class Constants {
   public static class ArmConstants{
     public static final int karmPort = 21;
     public static final double kgearRatio = 1;
+    public static final double kSniperSpeed = .7;
+    public static final double kSafeTemp = 60;
+    public static final float kReverseSoftLimit = 0;
+    public static final float kForwardSoftLimit = 270;
+    public static final double karmLengthMeters = 6.9;
+    public static final double karmMassKg = 0;
+
     public static class encoder{
       public static final int kchannelA = 0;
       public static final int kchannelB = 1;
     }
 
-    public static final double kSniperSpeed = .7;
-    public static final double kSafeTemp = 60;
-    public static final float kReverseSoftLimit = 0;
-    public static final float kForwardSoftLimit = 270;
-
-    public static class sim{}
+    public static class sim{
+    }
   }
 }

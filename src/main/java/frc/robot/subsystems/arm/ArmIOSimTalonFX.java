@@ -1,0 +1,52 @@
+// Copyright (c) FIRST and other WPILib contributors.
+// Open Source Software; you can modify and/or share it under the terms of
+// the WPILib BSD license file in the root directory of this project.
+
+package frc.robot.subsystems.arm;
+
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
+import frc.robot.Constants.ArmConstants;
+
+public class ArmIOSimTalonFX implements ArmIO {
+  /** Creates a new ArmIOSparkMax. */
+
+  private WPI_TalonFX armMotor = new WPI_TalonFX(ArmConstants.karmPort);
+  private Encoder encoder = new Encoder(ArmConstants.encoder.kchannelA,ArmConstants.encoder.kchannelB);
+  private SingleJointedArmSim sim = new SingleJointedArmSim(
+      DCMotor.getFalcon500(1), 
+      ArmConstants.kgearRatio, 
+      SingleJointedArmSim.estimateMOI(ArmConstants.karmLengthMeters, ArmConstants.karmMassKg), 
+      ArmConstants.karmLengthMeters, 
+      ArmConstants.kReverseSoftLimit / ArmConstants.kgearRatio, 
+      ArmConstants.kForwardSoftLimit / ArmConstants.kgearRatio, 
+      true);
+  
+  
+  public ArmIOSimTalonFX() {
+
+    armMotor.setSafetyEnabled(false);
+    armMotor.configForwardSoftLimitThreshold(ArmConstants.kForwardSoftLimit);
+    armMotor.configReverseSoftLimitThreshold(ArmConstants.kReverseSoftLimit);
+    armMotor.feed();
+
+    encoder.reset();
+
+  }
+
+  @Override 
+  public void updateInputs(ArmIOInputs inputs){
+    inputs.temperature = 0;
+    inputs.degrees = encoder.get() * ArmConstants.kgearRatio;
+    inputs.position = inputs.degrees * Math.PI / 180;
+    sim.setInput(inputs.degrees * 360);
+    sim.update(.02);
+    encoder.setDistancePerPulse((int) ((sim.getAngleRads() / (2*Math.PI)) * ArmConstants.kgearRatio));
+  }
+
+  public void setVoltage(int voltage){
+    sim.setInput(voltage);
+  }
+}
