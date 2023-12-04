@@ -16,6 +16,7 @@ public class Arm extends SubsystemBase {
   private final ArmIOInputsAutoLogged inputs = new ArmIOInputsAutoLogged();  
 
   private boolean sniperMode = false;
+  private boolean shouldHoldArm = false;
 
   /** Creates a new Arm. */
   public Arm(ArmIO io) {
@@ -32,6 +33,18 @@ public class Arm extends SubsystemBase {
 
   public void setArmSniperMode(boolean sniperMode){
     this.sniperMode = sniperMode;
+  }
+
+  public boolean getArmSniperMode(){
+    return sniperMode;
+  }
+
+  public void setArmHold(boolean shouldHoldArm){
+    this.shouldHoldArm = shouldHoldArm;
+  }
+
+  public boolean getArmHold(){
+    return shouldHoldArm;
   }
 
   public void manualArm(double speed){

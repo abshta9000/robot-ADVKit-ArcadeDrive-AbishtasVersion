@@ -1,7 +1,5 @@
 package frc.robot.subsystems.drive;
 
-//import org.littletonrobotics.junction.Logger;
-
 import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
@@ -23,8 +21,6 @@ public class DriveIOSparkMax implements DriveIO{
     private RelativeEncoder encBackRight; 
     
     private AHRS gyro; 
-
-    //private DifferentialDrive drive; 
 
     public DriveIOSparkMax(){ 
         mFrontLeft = new CANSparkMax(DriveBaseConstants.frontLeft, MotorType.kBrushless); 
@@ -52,8 +48,6 @@ public class DriveIOSparkMax implements DriveIO{
         encBackLeft.setVelocityConversionFactor(DriveBaseConstants.linConvFactor / 60); 
         
         gyro = new AHRS(SPI.Port.kMXP); 
-
-        //drive = new DifferentialDrive(mFrontLeft,mFrontRight);  
 
         gyro.calibrate();  
         gyro.reset(); 

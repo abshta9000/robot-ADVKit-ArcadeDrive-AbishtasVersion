@@ -5,8 +5,6 @@ import frc.robot.Constants.DriveBaseConstants;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-//likely necessary but cant figure it out
-//import frc.robot.subsystems.DriveIOInputsAutoLogged;
 
 public class Drive extends SubsystemBase{ 
     private final DriveIO io;  

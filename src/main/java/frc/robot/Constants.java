@@ -83,8 +83,9 @@ public final class Constants {
     public static final double kSafeTemp = 60;
     public static final float kReverseSoftLimit = 0;
     public static final float kForwardSoftLimit = 270;
-    public static final double karmLengthMeters = 6.9;
-    public static final double karmMassKg = 0;
+    public static final double karmLengthMeters = .9906;
+    //including intake
+    public static final double karmMassKg = 5.896722;
 
     public static class encoder{
       public static final int kchannelA = 0;
@@ -92,6 +93,14 @@ public final class Constants {
     }
 
     public static class sim{
+    }
+
+    public enum ArmModes{
+      IDLE
+    }
+
+    public static class angles{
+      public static final double idle = 0;
     }
   }
 }

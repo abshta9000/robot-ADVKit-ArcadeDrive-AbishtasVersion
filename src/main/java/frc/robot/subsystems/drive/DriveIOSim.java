@@ -13,8 +13,6 @@ public class DriveIOSim implements DriveIO{
      
     private DifferentialDrivetrainSim sim = DifferentialDrivetrainSim
         .createKitbotSim(KitbotMotor.kDualCIMPerSide, KitbotGearing.k10p71, KitbotWheelSize.kSixInch, null);
-    //gearing may be wrong, not sure what it is, so i copied from akvantage kit
-    //std holy crap
 
     private double leftAppliedVolts = 0.0;
     private double rightAppliedVolts = 0.0;
