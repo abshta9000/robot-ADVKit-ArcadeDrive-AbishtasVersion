@@ -8,6 +8,7 @@ public interface ArmIO {
         public double voltage = 0;
         public double position = 0;
         public double degrees = 0;
+        public double rpm = 0;
         
     }    
         

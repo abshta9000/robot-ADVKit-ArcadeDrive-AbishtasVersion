@@ -47,6 +47,14 @@ public class Arm extends SubsystemBase {
     return shouldHoldArm;
   }
 
+  public double getArmPosition(){
+    return inputs.position;
+  }
+
+  public double getArmVelocity(){
+    return inputs.rpm;
+  }
+
   public void manualArm(double speed){
     if(sniperMode){
       io.setVoltage(speed * ArmConstants.kSniperSpeed);

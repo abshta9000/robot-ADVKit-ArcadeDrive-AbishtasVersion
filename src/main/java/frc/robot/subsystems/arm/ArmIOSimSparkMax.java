@@ -47,6 +47,7 @@ public class ArmIOSimSparkMax implements ArmIO {
     inputs.temperature = 0;
     inputs.degrees = encoder.get() * ArmConstants.kgearRatio;
     inputs.position = inputs.degrees * Math.PI / 180;
+    inputs.rpm = encoder.getRate();
     sim.setInput(inputs.degrees * 360);
     sim.update(.02);
     encoder.setDistancePerPulse((int) ((sim.getAngleRads() / (2*Math.PI)) * ArmConstants.kgearRatio));
