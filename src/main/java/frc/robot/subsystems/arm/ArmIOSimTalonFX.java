@@ -41,6 +41,8 @@ public class ArmIOSimTalonFX implements ArmIO {
     inputs.temperature = 0;
     inputs.degrees = encoder.get() * ArmConstants.kgearRatio;
     inputs.position = inputs.degrees * Math.PI / 180;
+    inputs.rpm = (encoder.getRate() / 360) * 60;
+    inputs.velocity = encoder.getRate() / 22.75;
     sim.setInput(inputs.degrees * 360);
     sim.update(.02);
     encoder.setDistancePerPulse((int) ((sim.getAngleRads() / (2*Math.PI)) * ArmConstants.kgearRatio));

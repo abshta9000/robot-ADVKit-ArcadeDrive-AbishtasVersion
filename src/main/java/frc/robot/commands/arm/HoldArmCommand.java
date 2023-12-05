@@ -31,14 +31,16 @@ public class HoldArmCommand extends CommandBase {
     if (armSub.getArmHold() == true){
        armSub.manualArm(feedforward.calculate(
         Math.toRadians(armSub.getArmPosition()), 
-        Math.toRadians() / 12
+        Math.toRadians(armSub.getArmVelocity())
       ));
     }
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    armSub.manualArm(0);
+  }
 
   // Returns true when the command should end.
   @Override

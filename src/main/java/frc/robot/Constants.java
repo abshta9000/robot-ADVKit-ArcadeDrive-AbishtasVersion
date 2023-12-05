@@ -52,7 +52,12 @@ public final class Constants {
     public static final double linConvFactor = Units.inchesToMeters(1/gearRatio*2*Math.PI*1*Units.inchesToMeters(wheelRadius) * (2.16/0.548));
     public static final double kEncoderCPR = 4096.0;
     public static final double kEncoderDistancePerPulse = ((2*wheelRadius) * Math.PI) / (double) kEncoderCPR;
-  } 
+  
+    public static final double kTrackWidth = 6.9;
+    public static final double kWheelBase = 6.9;
+  
+  }
+  
 
   public static class AutonConstants{
     public enum Modes{

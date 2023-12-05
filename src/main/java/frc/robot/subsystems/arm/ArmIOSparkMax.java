@@ -36,8 +36,9 @@ public class ArmIOSparkMax implements ArmIO {
   public void updateInputs(ArmIOInputs inputs){
     inputs.temperature = armMotor.getMotorTemperature();
     inputs.degrees = encoder.get() * ArmConstants.kgearRatio;
-
+    inputs.rpm = (encoder.getRate() / 360) * 60;
     inputs.position = inputs.degrees * Math.PI / 180;
+    inputs.velocity = encoder.getRate() / 22.75;
   }
 
   public void setVoltage(int voltage){
