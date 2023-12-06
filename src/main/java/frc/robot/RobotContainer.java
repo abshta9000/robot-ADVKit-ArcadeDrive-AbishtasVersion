@@ -7,8 +7,11 @@ package frc.robot;
 import frc.robot.Constants.*;
 import frc.robot.Constants.AutonConstants.Modes;
 import frc.robot.commands.drive.ArcadeCommand;
+import frc.robot.subsystems.arm.Arm;
+import frc.robot.subsystems.arm.ArmIOSimSparkMax;
 import frc.robot.subsystems.auton.Auton;
 import frc.robot.subsystems.drive.*;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -28,6 +31,7 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private Drive subDrive;
   private Auton subAuton;
+  private Arm subArm;
 
   private CommandXboxController m_driverController =  new CommandXboxController(OperatorConstants.kDriverControllerPort);
   private CommandGenericHID buttonBoard = new CommandGenericHID(OperatorConstants.ButtonBoard.BUTTONBOARD_PORT);
@@ -42,8 +46,8 @@ public class RobotContainer {
    coneToggle,
    buttonSUBSTATIONPOS,
    buttonIDLEPOS,
-   buttonOUT, 
-   buttonIN,
+   buttonOUT = m_driverController.b(), 
+   buttonIN = m_driverController.a(),
    buttonGROUNDPOS,
    toggleIntakeButton,
    toggleOutakeButton,
@@ -55,6 +59,7 @@ public class RobotContainer {
 
 
     subDrive = new Drive(new DriveIOSim()); 
+    subArm = new Arm(new ArmIOSimSparkMax());
     subAuton = new Auton(subDrive);
 
     SmartDashboard.putNumber("GYRO CALC", 1);
@@ -64,8 +69,8 @@ public class RobotContainer {
     // teleopChooser.addOption(null, null);
 
     subDrive.setDefaultCommand(new ArcadeCommand(
-      () -> -m_driverController.getLeftY(),
-      () -> m_driverController.getRightX(),
+      () -> -MathUtil.applyDeadband(m_driverController.getLeftY(),.1),
+      () -> -MathUtil.applyDeadband(m_driverController.getRawAxis(2),.1),
       subDrive
     ));
 
@@ -87,16 +92,21 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    //code from rookie rewrite (by me btw)
-    sniperToggle
-    .and(m_driverController.leftTrigger()
-    .and(m_driverController.rightTrigger()
-    .whileTrue(
-      new InstantCommand(
-        () -> subDrive.setDriveSniperMode(true)))
-    .onFalse(
-      new InstantCommand(
-        () -> subDrive.setDriveSniperMode(false)))));
+    // sniperToggle
+    // .and(m_driverController.leftTrigger()
+    // .and(m_driverController.rightTrigger()
+    // .whileTrue(
+    //   new InstantCommand(
+    //     () -> subDrive.setDriveSniperMode(true)))
+    // .onFalse(
+    //   new InstantCommand(
+    //     () -> subDrive.setDriveSniperMode(false)))));
+    buttonOUT.onTrue(new InstantCommand(()-> subArm.manualArm(.9)))
+    .onFalse(new InstantCommand(()-> subArm.manualArm(0)));
+
+    buttonIN.onTrue(new InstantCommand(()-> subArm.manualArm(-.9)))
+    .onFalse(new InstantCommand(()-> subArm.manualArm(0)));
+
   }
 
 

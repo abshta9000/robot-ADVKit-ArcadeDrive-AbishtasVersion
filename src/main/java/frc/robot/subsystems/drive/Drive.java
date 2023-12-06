@@ -81,6 +81,7 @@ public class Drive extends SubsystemBase{
         return initialGyroPitch;
     }
     public Rotation2d getRotation2d(){
+        // System.out.println((inputs.gyroYaw));
         return new Rotation2d(Math.toRadians(inputs.gyroYaw));
     }
 } 

@@ -51,7 +51,7 @@ public class ArmIOSimSparkMax implements ArmIO {
     inputs.velocity = encoder.getRate() / 22.75;
     sim.setInput(inputs.degrees * 360);
     sim.update(.02);
-    encoder.setDistancePerPulse((int) ((sim.getAngleRads() / (2*Math.PI)) * ArmConstants.kgearRatio));
+    encoder.setDistancePerPulse(1);
   }
 
   public void setVoltage(int voltage){

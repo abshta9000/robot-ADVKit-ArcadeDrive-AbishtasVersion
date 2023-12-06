@@ -33,10 +33,11 @@ public class ArcadeCommand extends CommandBase {
   public void execute() {
     
     double reducedSpeed = speedFunction.getAsDouble();
+    // System.out.println(rotationFunction.getAsDouble());
     double reducedRotation = rotationFunction.getAsDouble();
 
-    if(Math.abs(reducedSpeed) < 0.1) reducedSpeed = 0;
-    if(Math.abs(reducedRotation) < 0.1) reducedRotation = 0;
+    // if(Math.abs(reducedSpeed) < 0.1) reducedSpeed = 0;
+    // if(Math.abs(reducedRotation) < 0.1) reducedRotation = 0;
 
     driveSub.arcadeDrive(reducedSpeed, reducedRotation);
   }
