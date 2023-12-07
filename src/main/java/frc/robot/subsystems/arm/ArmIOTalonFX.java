@@ -29,9 +29,9 @@ public class ArmIOTalonFX implements ArmIO {
   @Override 
   public void updateInputs(ArmIOInputs inputs){
     inputs.temperature = armMotor.getTemperature();
-    inputs.degrees = encoder.get() * ArmConstants.kgearRatio;
+    inputs.radians = encoder.get() * ArmConstants.kgearRatio;
     inputs.rpm = (encoder.getRate() / 360) * 60;
-    inputs.position = inputs.degrees * Math.PI / 180;
+    inputs.position = inputs.radians * Math.PI / 180;
     inputs.velocity = encoder.getRate() / 22.75;
   }
 

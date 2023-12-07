@@ -4,10 +4,17 @@
 
 package frc.robot.subsystems.arm;
 
+import java.util.Vector;
+
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform2d;
+import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
@@ -38,9 +45,17 @@ public class Arm extends SubsystemBase {
   @Override
   public void periodic() {
     io.updateInputs(inputs);   
-    humurus.setAngle(inputs.degrees);
-    pose2d = new Pose2d(0,ArmConstants.karmLengthMeters,new Rotation2d(inputs.degrees));
-    Logger.getInstance().recordOutput("ArmPosition",pose2d);
+    humurus.setAngle(inputs.radians);
+    pose2d = new Pose2d(0,ArmConstants.karmLengthMeters,new Rotation2d(inputs.radians));
+    Pose3d root = new Pose3d(0,0,0,new Rotation3d());
+    Pose3d end = new Pose3d(
+      Math.cos(Math.toDegrees(inputs.radians)) * ArmConstants.karmLengthMeters,
+      Math.sin(Math.toDegrees(inputs.radians)) * ArmConstants.karmLengthMeters,
+      0,
+      new Rotation3d());
+    Transform3d trans3d = new Transform3d(root, end);
+    // System.out.println(pose2d.getX() + " " + pose2d.getY());
+    Logger.getInstance().recordOutput("ArmPosition",end);
     Logger.getInstance().processInputs("Arm", inputs);
     SmartDashboard.putBoolean("ArmSniperMode", sniperMode);
     SmartDashboard.putBoolean("ArmSafeTemp", safeTemp());
@@ -75,9 +90,11 @@ public class Arm extends SubsystemBase {
   }
 
   public void manualArm(double speed){
-    if(sniperMode){
+    /*if(sniperMode){
       io.setVoltage(speed * ArmConstants.kSniperSpeed);
-    } else io.setVoltage(speed);
+    } else*/ 
+    io.setVoltage(speed);
+
   }
 
   public boolean safeTemp(){

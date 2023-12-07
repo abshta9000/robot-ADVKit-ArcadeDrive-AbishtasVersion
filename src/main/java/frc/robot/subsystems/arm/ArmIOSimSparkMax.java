@@ -10,6 +10,7 @@ import com.revrobotics.CANSparkMax.SoftLimitDirection;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.simulation.EncoderSim;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 import frc.robot.Constants.ArmConstants;
 
@@ -18,6 +19,7 @@ public class ArmIOSimSparkMax implements ArmIO {
 
   private CANSparkMax armMotor = new CANSparkMax(ArmConstants.karmPort, MotorType.kBrushless);
   private Encoder encoder = new Encoder(ArmConstants.encoder.kchannelA,ArmConstants.encoder.kchannelB);
+  private EncoderSim simEncoder;
   private SingleJointedArmSim sim = new SingleJointedArmSim(
       DCMotor.getNEO(1), 
       ArmConstants.kgearRatio, 
@@ -25,7 +27,9 @@ public class ArmIOSimSparkMax implements ArmIO {
       ArmConstants.karmLengthMeters, 
       ArmConstants.kReverseSoftLimit / ArmConstants.kgearRatio, 
       ArmConstants.kForwardSoftLimit / ArmConstants.kgearRatio, 
-      true);
+      false);
+
+  private double voltage = 0;
   
   
   public ArmIOSimSparkMax() {
@@ -39,22 +43,29 @@ public class ArmIOSimSparkMax implements ArmIO {
     armMotor.burnFlash();
 
     encoder.reset();
+    encoder.setDistancePerPulse(1);
 
+    simEncoder = new EncoderSim(encoder);
+    simEncoder.setCount(10);
   }
 
   @Override 
   public void updateInputs(ArmIOInputs inputs){
+
+
+    // System.out.println(simEncoder.getCount());
     inputs.temperature = 0;
-    inputs.degrees = encoder.get() * ArmConstants.kgearRatio;
-    inputs.position = inputs.degrees * Math.PI / 180;
-    inputs.rpm = (encoder.getRate() / 360) * 60;
-    inputs.velocity = encoder.getRate() / 22.75;
-    sim.setInput(inputs.degrees * 360);
+    inputs.radians = Math.toRadians(simEncoder.getCount() * ArmConstants.kgearRatio);
+    inputs.position = inputs.radians * Math.PI / 180;
+    inputs.rpm = (simEncoder.getRate() / 360) * 60;
+    inputs.velocity = simEncoder.getRate() / 22.75;
+    sim.setInputVoltage(voltage);
     sim.update(.02);
-    encoder.setDistancePerPulse(1);
+    simEncoder.setCount((int) ((sim.getAngleRads() / 6.28) * ArmConstants.kgearRatio));
   }
 
-  public void setVoltage(int voltage){
-    sim.setInput(voltage);
+  @Override
+  public void setVoltage(double voltage){
+    this.voltage = voltage;
   }
 }

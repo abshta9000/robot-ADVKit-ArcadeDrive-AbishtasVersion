@@ -101,10 +101,10 @@ public class RobotContainer {
     // .onFalse(
     //   new InstantCommand(
     //     () -> subDrive.setDriveSniperMode(false)))));
-    buttonOUT.onTrue(new InstantCommand(()-> subArm.manualArm(.9)))
+    buttonOUT.whileTrue(new InstantCommand(()-> subArm.manualArm(.9)))
     .onFalse(new InstantCommand(()-> subArm.manualArm(0)));
 
-    buttonIN.onTrue(new InstantCommand(()-> subArm.manualArm(-.9)))
+    buttonIN.whileTrue(new InstantCommand(()-> subArm.manualArm(-.9)))
     .onFalse(new InstantCommand(()-> subArm.manualArm(0)));
 
   }

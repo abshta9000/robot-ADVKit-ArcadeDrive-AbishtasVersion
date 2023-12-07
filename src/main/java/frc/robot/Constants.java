@@ -83,7 +83,7 @@ public final class Constants {
 
   public static class ArmConstants{
     public static final int karmPort = 21;
-    public static final double kgearRatio = 1;
+    public static final double kgearRatio = 22.755;
     public static final double kSniperSpeed = .7;
     public static final double kSafeTemp = 60;
     public static final float kReverseSoftLimit = 0;
