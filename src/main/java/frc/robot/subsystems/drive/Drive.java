@@ -39,16 +39,16 @@ public class Drive extends SubsystemBase{
 
     public void arcadeDrive(double i_speed, double i_rotation){
         
-        double speed = i_speed;
+        double speed = i_speed * 20;
         double rotation = i_rotation;
-        if (drivesniperMode) {
-            System.out.println("DriveSubsystem -Sniper Mode is running");
-            speed *= DriveBaseConstants.DRIVE_SNIPER_SPEED;
-            rotation *= DriveBaseConstants.DRIVE_SNIPER_SPEED;
-          }else {
-            speed *= DriveBaseConstants.SPEED_REDUCTION;
-            rotation *= DriveBaseConstants.ROTATION_REDUCTION;
-          }
+        // if (drivesniperMode) {
+        //     System.out.println("DriveSubsystem -Sniper Mode is running");
+        //     speed *= DriveBaseConstants.DRIVE_SNIPER_SPEED;
+        //     rotation *= DriveBaseConstants.DRIVE_SNIPER_SPEED;
+        //   }else {
+        //     speed *= DriveBaseConstants.SPEED_REDUCTION;
+        //     rotation *= DriveBaseConstants.ROTATION_REDUCTION;
+        //   }
         
         var speeds = DifferentialDrive.arcadeDriveIK(speed, rotation, false);  
         io.setVoltage(speeds.left, speeds.right); 
