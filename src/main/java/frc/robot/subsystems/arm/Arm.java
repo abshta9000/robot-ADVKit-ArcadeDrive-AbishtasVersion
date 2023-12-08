@@ -49,10 +49,10 @@ public class Arm extends SubsystemBase {
     pose2d = new Pose2d(0,ArmConstants.karmLengthMeters,new Rotation2d(inputs.radians));
     Pose3d root = new Pose3d(0,0,0,new Rotation3d());
     Pose3d end = new Pose3d(
-      Math.cos(Math.toDegrees(inputs.radians)) * ArmConstants.karmLengthMeters,
-      Math.sin(Math.toDegrees(inputs.radians)) * ArmConstants.karmLengthMeters,
+      .3,
       0,
-      new Rotation3d());
+      .80,
+      new Rotation3d(inputs.radians,0,Math.PI/2));
     Transform3d trans3d = new Transform3d(root, end);
     // System.out.println(pose2d.getX() + " " + pose2d.getY());
     Logger.getInstance().recordOutput("ArmPosition",end);
