@@ -4,14 +4,35 @@
 
 package frc.robot.subsystems.intake;
 
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import frc.robot.Constants.IntakeConstants;
 
-public class IntakeIOSparkMax extends SubsystemBase {
+public class IntakeIOSparkMax implements IntakeIO {
   /** Creates a new IntakeIOSparkMax. */
-  public IntakeIOSparkMax() {}
+  private CANSparkMax intakeMotor;
+  
+  public IntakeIOSparkMax() {
+    intakeMotor = new CANSparkMax(IntakeConstants.kintakePort,MotorType.kBrushless);
+    intakeMotor.restoreFactoryDefaults();
+    intakeMotor.clearFaults();
+    intakeMotor.setSmartCurrentLimit(IntakeConstants.kcurrentLimit);
+    intakeMotor.burnFlash();
+
+  }
+
+  @Override 
+  public void updateInputs(IntakeIOInputs inputs){ 
+    inputs.velocity = intakeMotor.getEncoder().getVelocity();
+    inputs.position = intakeMotor.getEncoder().getPosition();
+    inputs.speed = intakeMotor.get();
+    inputs.current = intakeMotor.getOutputCurrent();
+    inputs.temperature = intakeMotor.getMotorTemperature();
+  }  
+
 
   @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
+  public void setVoltage(double volts){ 
+    intakeMotor.setVoltage(volts);
   }
 }

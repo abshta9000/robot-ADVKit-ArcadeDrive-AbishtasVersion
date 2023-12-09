@@ -11,6 +11,8 @@ import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.arm.ArmIOSimSparkMax;
 import frc.robot.subsystems.auton.Auton;
 import frc.robot.subsystems.drive.*;
+import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.intake.IntakeIOSparkMaxSim;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -32,6 +34,7 @@ public class RobotContainer {
   private Drive subDrive;
   private Auton subAuton;
   private Arm subArm;
+  private Intake subIntake;
 
   private CommandXboxController m_driverController =  new CommandXboxController(OperatorConstants.kDriverControllerPort);
   private CommandGenericHID buttonBoard = new CommandGenericHID(OperatorConstants.ButtonBoard.BUTTONBOARD_PORT);
@@ -43,14 +46,14 @@ public class RobotContainer {
    buttonHIGHPOS,
    buttonMIDPOS,
    sniperMode = m_driverController.y(),
-   coneToggle,
+   coneToggle = m_driverController.x(),
    buttonSUBSTATIONPOS,
    buttonIDLEPOS,
    buttonOUT = m_driverController.b(), 
    buttonIN = m_driverController.a(),
    buttonGROUNDPOS,
-   toggleIntakeButton,
-   toggleOutakeButton;
+   intakeButton = m_driverController.povUp(),
+   outakeButton = m_driverController.povDown();
 
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -59,7 +62,9 @@ public class RobotContainer {
 
     subDrive = new Drive(new DriveIOSim()); 
     subArm = new Arm(new ArmIOSimSparkMax());
-    subAuton = new Auton(subDrive);
+    subIntake = new Intake(new IntakeIOSparkMaxSim());
+    subAuton = new Auton(subDrive,subArm,subIntake);
+    
 
     SmartDashboard.putNumber("GYRO CALC", 1);
     autonChooser = new SendableChooser<>();
@@ -69,9 +74,9 @@ public class RobotContainer {
 
     subDrive.setDefaultCommand(new ArcadeCommand(
       () -> -MathUtil.applyDeadband(m_driverController.getLeftY(),.1),
-      // unfortunately, .getRightX() does not work on this rpoject, no matter the amount of times I tried (likely a issue on my end)
+      // unfortunately, .getRightX() does not work on this project, no matter the amount of times I tried (likely a issue on my end)
       // so to substitute, we have to get the raw axis, and for my controller it is 2
-      // if your controller's axis is difefrent please update the axis below!
+      // if your controller's axis is different please update the axis below!
       () -> -MathUtil.applyDeadband(m_driverController.getRawAxis(2),.1),
       subDrive
     ));
@@ -114,6 +119,14 @@ public class RobotContainer {
 
     buttonIN.onTrue(new InstantCommand(()-> subArm.manualArm(-.9)))
     .onFalse(new InstantCommand(()-> subArm.manualArm(0)));
+
+    coneToggle.onTrue(new InstantCommand(() -> subIntake.setMode(subIntake.getOppositeMode())));
+    
+    intakeButton.whileTrue(new InstantCommand(() -> subIntake.spinIn()))
+    .onFalse(new InstantCommand(() -> subIntake.spinOff()));
+
+    outakeButton.whileTrue(new InstantCommand(() -> subIntake.spinOut()))
+    .onFalse(new InstantCommand(() -> subIntake.spinOff()));
 
   }
 

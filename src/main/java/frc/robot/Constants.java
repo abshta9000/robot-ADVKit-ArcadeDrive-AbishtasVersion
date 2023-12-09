@@ -15,6 +15,9 @@ import edu.wpi.first.math.util.Units;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
+
+  public static final double kSafeTemp = 60;
+
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
     public static class ButtonBoard{
@@ -85,7 +88,6 @@ public final class Constants {
     public static final int karmPort = 21;
     public static final double kgearRatio = 22.755;
     public static final double kSniperSpeed = .7;
-    public static final double kSafeTemp = 60;
     public static final float kReverseSoftLimit = 0;
     public static final float kForwardSoftLimit = 270;
     public static final double karmLengthMeters = .9906;
@@ -106,6 +108,15 @@ public final class Constants {
 
     public static class angles{
       public static final double idle = 0;
+    }
+  }
+
+  public static class IntakeConstants{
+    public static final int kintakePort = 22;
+    public static final int kcurrentLimit = 20;
+    public enum Modes{
+      CUBE,
+      CONE
     }
   }
 }

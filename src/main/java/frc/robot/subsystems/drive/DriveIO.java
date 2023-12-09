@@ -20,7 +20,9 @@ public interface DriveIO {
         
         public double gyroPitch = 0; 
         public double gyroRoll = 0; 
-        public double gyroYaw = 0;       
+        public double gyroYaw = 0;    
+        
+        public double highestTemperature = 0;
         }    
         
     public default void updateInputs(DriveIOInputs inputs){} 

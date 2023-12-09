@@ -78,6 +78,8 @@ public class DriveIOTalonFX implements DriveIO{
         inputs.gyroPitch = (gyro.getPitch());  
         inputs.gyroRoll = (gyro.getRoll()); 
         inputs.gyroYaw = (gyro.getYaw()); 
+
+        inputs.highestTemperature = Math.max(mFrontLeft.getTemperature(),Math.max(mFrontRight.getTemperature(),Math.max(mBackLeft.getTemperature(),mBackRight.getTemperature())));
     }  
 
     @Override

@@ -9,6 +9,7 @@ import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.Constants.ArmConstants;
 
 public class Arm extends SubsystemBase {
@@ -79,8 +80,9 @@ public class Arm extends SubsystemBase {
   }
 
   public boolean safeTemp(){
-    if (inputs.temperature > ArmConstants.kSafeTemp){
-      System.out.println("ARM TEMPERATURE EXCEEDED");
+    if (inputs.temperature > Constants.kSafeTemp){
+      System.out.println("Arm - Motor temperature exceeded");
+      io.setVoltage(0);
       return false;
     } return true;
   }

@@ -6,7 +6,9 @@ package frc.robot.subsystems.auton;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.drive.Drive;
+import frc.robot.subsystems.intake.Intake;
 import frc.robot.Constants.AutonConstants;
 import frc.robot.Constants.AutonConstants.Modes;
 import frc.robot.commands.drive.ArcadeCommand;
@@ -17,9 +19,13 @@ public class Auton {
   /** Creates a new Auton. */
 
   public Drive driveSub;
+  public Arm armSub;
+  public Intake intakeSub;
 
-  public Auton(Drive i_driveSub) {
-    this.driveSub = i_driveSub;
+  public Auton(Drive driveSub, Arm armSub, Intake intakeSub) {
+    this.driveSub = driveSub;
+    this.armSub = armSub;
+    this.intakeSub = intakeSub;
   }
   public Command autonomousCommand(Modes val){
     switch(val){

@@ -72,6 +72,8 @@ public class DriveIOSparkMax implements DriveIO{
         inputs.gyroPitch = (gyro.getPitch());  
         inputs.gyroRoll = (gyro.getRoll()); 
         inputs.gyroYaw = (gyro.getYaw()); 
+
+        inputs.highestTemperature = Math.max(mFrontLeft.getMotorTemperature(),Math.max(mFrontRight.getMotorTemperature(),Math.max(mBackLeft.getMotorTemperature(),mBackRight.getMotorTemperature())));
     }  
 
     @Override
