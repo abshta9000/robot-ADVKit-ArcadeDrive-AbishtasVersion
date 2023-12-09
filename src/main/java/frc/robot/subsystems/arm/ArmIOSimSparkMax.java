@@ -4,23 +4,29 @@
 
 package frc.robot.subsystems.arm;
 
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMax.IdleMode;
-import com.revrobotics.CANSparkMax.SoftLimitDirection;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.numbers.N2;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.simulation.EncoderSim;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 import frc.robot.Constants.ArmConstants;
+import edu.wpi.first.math.numbers.N1;
+import org.ejml.simple.SimpleMatrix;
 
 public class ArmIOSimSparkMax implements ArmIO {
   /** Creates a new ArmIOSparkMax. */
 
-  private CANSparkMax armMotor = new CANSparkMax(ArmConstants.karmPort, MotorType.kBrushless);
   private Encoder encoder = new Encoder(ArmConstants.encoder.kchannelA,ArmConstants.encoder.kchannelB);
   private EncoderSim simEncoder;
-  private SingleJointedArmSim sim = new SingleJointedArmSim(
+  private SingleJointedArmSim sim;
+
+  private double voltage = 0;
+
+  public ArmIOSimSparkMax() {
+
+
+    sim = new SingleJointedArmSim(
       DCMotor.getNEO(1), 
       ArmConstants.kgearRatio, 
       SingleJointedArmSim.estimateMOI(ArmConstants.karmLengthMeters, ArmConstants.karmMassKg), 
@@ -28,44 +34,50 @@ public class ArmIOSimSparkMax implements ArmIO {
       ArmConstants.kReverseSoftLimit / ArmConstants.kgearRatio, 
       ArmConstants.kForwardSoftLimit / ArmConstants.kgearRatio, 
       false);
+    
+    
 
-  private double voltage = 0;
-  
-  
-  public ArmIOSimSparkMax() {
+    // im not sure what this does, but let me walk through what i think that happens
+    // firstly, the .setState requires a matrick classed object, so i created one
+    // theay into matrix
+    // so the matrix class is just making it so that the .setState can read it
+    // im not entireely sure what the double in the double aray do, ill update this comment when i do
 
-    armMotor.restoreFactoryDefaults();
-    armMotor.clearFaults();
-    armMotor.setIdleMode(IdleMode.kBrake);
-    armMotor.setSmartCurrentLimit(60);
-    armMotor.setSoftLimit(SoftLimitDirection.kForward, ArmConstants.kForwardSoftLimit);
-    armMotor.setSoftLimit(SoftLimitDirection.kReverse, ArmConstants.kReverseSoftLimit);
-    armMotor.burnFlash();
+    // left column controls velocity and rigth controls position
+    // speed
+    //      position
+    // ⬇️   ⬇️
+    // {69},{69}
+    // still figuring out what the rows mean
+
+    // if row length == column lenght, so like a square 
+    // previous hypothesis is incorrect, always has to be 1x1 or theres and error
+
+    // also btw this code basically sets the deafult state of the arm (right in the middle)
+    double[][] defaultArray= {{0},{7.5}};
+    Matrix defaultPosition = new Matrix<N2,N1>(new SimpleMatrix(defaultArray));
+    sim.setState(defaultPosition);
+
 
     encoder.reset();
     encoder.setDistancePerPulse(1);
 
     simEncoder = new EncoderSim(encoder);
-    simEncoder.setCount(10);
   }
 
   @Override 
   public void updateInputs(ArmIOInputs inputs){
-
-
-    // System.out.println(simEncoder.getCount());
-    inputs.temperature = 0;
-    inputs.radians = Math.toRadians(simEncoder.getCount() * ArmConstants.kgearRatio);
+    sim.update(.02);
+    inputs.radians = Math.toRadians(simEncoder.getCount() * (ArmConstants.kgearRatio / 7.5));
     inputs.position = inputs.radians * Math.PI / 180;
     inputs.rpm = (simEncoder.getRate() / 360) * 60;
-    inputs.velocity = simEncoder.getRate() / 22.75;
+    inputs.velocity = simEncoder.getRate() / ArmConstants.kgearRatio;
     sim.setInputVoltage(voltage);
-    sim.update(.02);
     simEncoder.setCount((int) ((sim.getAngleRads() / 6.28) * ArmConstants.kgearRatio));
   }
 
   @Override
   public void setVoltage(double voltage){
-    this.voltage = voltage;
+    this.voltage = voltage * 7.5;
   }
 }

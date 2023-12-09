@@ -42,7 +42,7 @@ public class RobotContainer {
   Trigger buttonLOWPOS,
    buttonHIGHPOS,
    buttonMIDPOS,
-   sniperToggle = buttonBoard.button(OperatorConstants.ButtonBoard.SNIPERMODE_BUTTON),
+   sniperMode = m_driverController.y(),
    coneToggle,
    buttonSUBSTATIONPOS,
    buttonIDLEPOS,
@@ -50,8 +50,7 @@ public class RobotContainer {
    buttonIN = m_driverController.a(),
    buttonGROUNDPOS,
    toggleIntakeButton,
-   toggleOutakeButton,
-   snipermodeButton;
+   toggleOutakeButton;
 
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -70,6 +69,9 @@ public class RobotContainer {
 
     subDrive.setDefaultCommand(new ArcadeCommand(
       () -> -MathUtil.applyDeadband(m_driverController.getLeftY(),.1),
+      // unfortunately, .getRightX() does not work on this rpoject, no matter the amount of times I tried (likely a issue on my end)
+      // so to substitute, we have to get the raw axis, and for my controller it is 2
+      // if your controller's axis is difefrent please update the axis below!
       () -> -MathUtil.applyDeadband(m_driverController.getRawAxis(2),.1),
       subDrive
     ));
@@ -92,19 +94,25 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    // sniperToggle
-    // .and(m_driverController.leftTrigger()
-    // .and(m_driverController.rightTrigger()
-    // .whileTrue(
-    //   new InstantCommand(
-    //     () -> subDrive.setDriveSniperMode(true)))
-    // .onFalse(
-    //   new InstantCommand(
-    //     () -> subDrive.setDriveSniperMode(false)))));
-    buttonOUT.whileTrue(new InstantCommand(()-> subArm.manualArm(.9)))
+
+    sniperMode.whileTrue(
+      new InstantCommand(
+        () -> subDrive.setDriveSniperMode(true)))
+    .onFalse(
+      new InstantCommand(
+        () -> subDrive.setDriveSniperMode(false)));
+
+    sniperMode.whileTrue(
+      new InstantCommand(
+        () -> subArm.setArmSniperMode(true)))
+    .onFalse(
+      new InstantCommand(
+        () -> subArm.setArmSniperMode(false)));
+
+    buttonOUT.onTrue(new InstantCommand(()-> subArm.manualArm(.9)))
     .onFalse(new InstantCommand(()-> subArm.manualArm(0)));
 
-    buttonIN.whileTrue(new InstantCommand(()-> subArm.manualArm(-.9)))
+    buttonIN.onTrue(new InstantCommand(()-> subArm.manualArm(-.9)))
     .onFalse(new InstantCommand(()-> subArm.manualArm(0)));
 
   }

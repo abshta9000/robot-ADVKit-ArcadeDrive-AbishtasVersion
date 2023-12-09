@@ -4,51 +4,80 @@
 
 package frc.robot.subsystems.arm;
 
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.numbers.N2;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.simulation.EncoderSim;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 import frc.robot.Constants.ArmConstants;
+import edu.wpi.first.math.numbers.N1;
+import org.ejml.simple.SimpleMatrix;
 
 public class ArmIOSimTalonFX implements ArmIO {
   /** Creates a new ArmIOSparkMax. */
 
-  private WPI_TalonFX armMotor = new WPI_TalonFX(ArmConstants.karmPort);
   private Encoder encoder = new Encoder(ArmConstants.encoder.kchannelA,ArmConstants.encoder.kchannelB);
-  private SingleJointedArmSim sim = new SingleJointedArmSim(
+  private EncoderSim simEncoder;
+  private SingleJointedArmSim sim;
+
+  private double voltage = 0;
+
+  public ArmIOSimTalonFX() {
+
+
+    sim = new SingleJointedArmSim(
       DCMotor.getFalcon500(1), 
       ArmConstants.kgearRatio, 
       SingleJointedArmSim.estimateMOI(ArmConstants.karmLengthMeters, ArmConstants.karmMassKg), 
       ArmConstants.karmLengthMeters, 
       ArmConstants.kReverseSoftLimit / ArmConstants.kgearRatio, 
       ArmConstants.kForwardSoftLimit / ArmConstants.kgearRatio, 
-      true);
-  
-  
-  public ArmIOSimTalonFX() {
+      false);
+    
+    
 
-    armMotor.setSafetyEnabled(false);
-    armMotor.configForwardSoftLimitThreshold(ArmConstants.kForwardSoftLimit);
-    armMotor.configReverseSoftLimitThreshold(ArmConstants.kReverseSoftLimit);
-    armMotor.feed();
+    // im not sure what this does, but let me walk through what i think that happens
+    // firstly, the .setState requires a matrick classed object, so i created one
+    // theay into matrix
+    // so the matrix class is just making it so that the .setState can read it
+    // im not entireely sure what the double in the double aray do, ill update this comment when i do
+
+    // left column controls velocity and rigth controls position
+    // speed
+    //      position
+    // ⬇️   ⬇️
+    // {69},{69}
+    // still figuring out what the rows mean
+
+    // if row length == column lenght, so like a square 
+    // previous hypothesis is incorrect, always has to be 1x1 or theres and error
+
+    // also btw this code basically sets the deafult state of the arm (right in the middle)
+    double[][] defaultArray= {{0},{7.5}};
+    Matrix defaultPosition = new Matrix<N2,N1>(new SimpleMatrix(defaultArray));
+    sim.setState(defaultPosition);
+
 
     encoder.reset();
+    encoder.setDistancePerPulse(1);
 
+    simEncoder = new EncoderSim(encoder);
   }
 
   @Override 
   public void updateInputs(ArmIOInputs inputs){
-    inputs.temperature = 0;
-    inputs.radians = encoder.get() * ArmConstants.kgearRatio;
-    inputs.position = inputs.radians * Math.PI / 180;
-    inputs.rpm = (encoder.getRate() / 360) * 60;
-    inputs.velocity = encoder.getRate() / 22.75;
-    sim.setInput(inputs.radians * 360);
     sim.update(.02);
-    encoder.setDistancePerPulse((int) ((sim.getAngleRads() / (2*Math.PI)) * ArmConstants.kgearRatio));
+    inputs.radians = Math.toRadians(simEncoder.getCount() * (ArmConstants.kgearRatio / 7.5));
+    inputs.position = inputs.radians * Math.PI / 180;
+    inputs.rpm = (simEncoder.getRate() / 360) * 60;
+    inputs.velocity = simEncoder.getRate() / ArmConstants.kgearRatio;
+    sim.setInputVoltage(voltage);
+    simEncoder.setCount((int) ((sim.getAngleRads() / 6.28) * ArmConstants.kgearRatio));
   }
 
-  public void setVoltage(int voltage){
-    sim.setInput(voltage);
+  @Override
+  public void setVoltage(double voltage){
+    this.voltage = voltage * 7.5;
   }
 }

@@ -54,8 +54,8 @@ public class DriveIOSim implements DriveIO{
     @Override
     public void setVoltage(double leftVolts, double rightVolts){ 
         
-        leftAppliedVolts = MathUtil.clamp(leftVolts, -12.0, 12.0);
-        rightAppliedVolts = MathUtil.clamp(rightVolts, -12.0, 12.0);
+        leftAppliedVolts = MathUtil.clamp(leftVolts, -12.0, 12.0) * 3;
+        rightAppliedVolts = MathUtil.clamp(rightVolts, -12.0, 12.0) * 3;
         sim.setInputs(leftAppliedVolts, rightAppliedVolts);
     }
     
