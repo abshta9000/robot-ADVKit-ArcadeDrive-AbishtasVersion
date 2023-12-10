@@ -7,6 +7,7 @@ Robot model files and configs are here (v3): https://drive.google.com/file/d/1ec
 Uncompress them and put them in the userAssets folder in the advantage scope folder, more info on this page: https://github.com/Mechanical-Advantage/AdvantageScope/blob/main/docs/CUSTOM-ASSETS.md
 
 ## Controls
+**You must use a controller to run this project, or you will not be able to control the robot!!**
 1. Arcade Drive forward & backward speed
 2. Arcade Drive left & right rotation
 3. Sniper Mode toggler (for both arm and drive)
